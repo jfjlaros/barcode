@@ -137,6 +137,21 @@ def barcode(length, max_stretch, min_dist):
         min_dist)
 #barcode
 
+def testBarcodes(barcodes, min_dist):
+    """
+    Test a set of barcodes.
+
+    @arg barcodes: List of barcodes.
+    @type barcodes: list[str]
+    @arg min_dist: Minimum distance between the barcodes.
+    @type min_dist: int
+
+    @returns: The number of barcodes that violate the distance constraint.
+    @rtype: int
+    """
+    return len(barcodes) - len(filterDistance(barcodes, min_dist))
+#testBarcodes
+
 def main():
     """
     Main entry point.
@@ -144,6 +159,12 @@ def main():
     output_parser = argparse.ArgumentParser(add_help=False)
     output_parser.add_argument("OUTPUT", type=argparse.FileType('w'),
         help="output file")
+    input_parser = argparse.ArgumentParser(add_help=False)
+    input_parser.add_argument("INPUT", type=argparse.FileType('r'),
+        help="input file")
+    distance_parser = argparse.ArgumentParser(add_help=False)
+    distance_parser.add_argument("-d", dest="distance", type=int, default=3,
+        help="minimum distance between the barcodes")
 
     usage = __doc__.split("\n\n\n")
     parser = argparse.ArgumentParser(
@@ -151,20 +172,25 @@ def main():
         description=usage[0], epilog=usage[1])
     subparsers = parser.add_subparsers(dest="subcommand")
 
-    parser_makebc = subparsers.add_parser("makebc",
-        parents=[output_parser], description=docSplit(barcode))
-    parser_makebc.add_argument("-l", dest="length", type=int, default=8,
+    parser_make = subparsers.add_parser("make", parents=[output_parser,
+        distance_parser], description=docSplit(barcode))
+    parser_make.add_argument("-l", dest="length", type=int, default=8,
         help="lenght of the barcodes")
-    parser_makebc.add_argument("-s", dest="stretch", type=int, default=2,
+    parser_make.add_argument("-s", dest="stretch", type=int, default=2,
         help="maximum mononucleotide stretch length")
-    parser_makebc.add_argument("-d", dest="distance", type=int, default=3,
-        help="minimum distance between the barcodes")
+
+    parser_test = subparsers.add_parser("test", parents=[input_parser,
+        distance_parser], description=docSplit(testBarcodes))
 
     args = parser.parse_args()
 
-    if args.subcommand == "makebc":
+    if args.subcommand == "make":
         args.OUTPUT.write("\n".join(barcode(args.length, args.stretch,
             args.distance)))
+
+    if args.subcommand == "test":
+        print "%s barcodes violate the distance contraint." % testBarcodes(
+            map(lambda x: x.strip(), args.INPUT.readlines()), args.distance)
 #main
 
 if __name__ == "__main__":
