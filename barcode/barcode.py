@@ -105,7 +105,7 @@ class BarCode(object):
         @arg max_stretch: Maximum mononucleotide stretch length.
         @type max_stretch: int
         """
-        stretches = map(lambda x: max_stretch * x, self.__nucleotides)
+        stretches = map(lambda x: (max_stretch + 1) * x, self.__nucleotides)
         result = []
 
         for i in barcodes:
