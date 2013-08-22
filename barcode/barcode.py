@@ -173,7 +173,7 @@ def barcode(length, max_stretch, min_dist, distance):
         max_stretch), min_dist)
 #barcode
 
-def testBarcodes(barcodes, min_dist, distance):
+def testBarcodes(barcodes, min_dist, distance, handle):
     """
     Test a set of barcodes.
 
@@ -189,7 +189,11 @@ def testBarcodes(barcodes, min_dist, distance):
     """
     B = BarCode(distance)
 
-    return len(barcodes) - len(B.filterDistance(barcodes, min_dist))
+    good_subset = B.filterDistance(barcodes, min_dist)
+    if handle:
+        handle.write("\n".join(good_subset))
+
+    return len(barcodes) - len(good_subset)
 #testBarcodes
 
 def main():
@@ -224,6 +228,8 @@ def main():
 
     parser_test = subparsers.add_parser("test", parents=[input_parser,
         distance_parser], description=docSplit(testBarcodes))
+    parser_test.add_argument("-o", dest="output", type=argparse.FileType('w'),
+        help="list of good barcodes")
 
     args = parser.parse_args()
 
@@ -238,7 +244,7 @@ def main():
     if args.subcommand == "test":
         print "%s barcodes violate the distance contraint." % testBarcodes(
             map(lambda x: x.strip(), args.INPUT.readlines()), args.distance,
-            dfunc)
+            dfunc, args.output)
 #main
 
 if __name__ == "__main__":
