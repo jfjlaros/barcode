@@ -1,0 +1,242 @@
+\documentclass[slidestop]{beamer}
+
+\title{NGS barcodes}
+\providecommand{\myConference}{NGS work discussion}
+\providecommand{\myDate}{Wednesday, 5 June 2013}
+\author{Jeroen F. J. Laros}
+\providecommand{\myGroup}{Leiden Genome Technology Center}
+\providecommand{\myDepartment}{Department of Human Genetics}
+\providecommand{\myCenter}{Center for Human and Clinical Genetics}
+\providecommand{\lastCenterLogo}{
+  \raisebox{-0.1cm}{
+    \includegraphics[height = 1cm]{lgtc_logo}
+    %\includegraphics[height = 0.7cm]{ngi_logo}
+  }
+}
+\providecommand{\lastRightLogo}{
+  %\includegraphics[height = 0.7cm]{nbic_logo}
+  %\includegraphics[height = 0.8cm]{nwo_logo_en}
+  %\hspace{1.5cm}\includegraphics[height = 0.7cm]{gen2phen_logo}
+}
+
+\usetheme{lumc}
+
+\begin{document}
+
+% This disables the \pause command, handy in the editing phase.
+%\renewcommand{\pause}{}
+
+% Make the title page.
+\bodytemplate
+
+% First page of the presentation.
+\section{Introduction}
+\begin{frame}
+  \frametitle{Barcoding}
+
+  Idea:
+  \begin{itemize}
+    \item Add a sequence to identify a sample.
+    \begin{itemize}
+      \item Usually in the adapter.
+    \end{itemize}
+    \item Use this sequence to \emph{demultiplex} a dataset.
+  \end{itemize}
+  \bigskip
+  \pause
+
+  Characteristics:
+  \begin{itemize}
+    \item No ``difficult sequences'':
+    \begin{itemize}
+      \item Mononucleotide stretches.
+      \item \bt{GC}-content.
+    \end{itemize}
+    \item Sequencing error correction.
+    \begin{itemize}
+      \item A barcode must have a distance of at least $3$ to all others.
+    \end{itemize}
+  \end{itemize}
+\end{frame}
+
+\begin{frame}
+  \frametitle{Edit distance (or Levenshtein distance)}
+  \[
+    \mathrm{lev}_{a, b}(i, j) =
+    \begin{cases}
+      \mathrm{max}(i, j) & \hspace{-2.25cm}\mathrm{if\ min}(i, j) = 0,\\
+      \mathrm{min}
+      \begin{cases}
+        \mathrm{lev}_{a, b}(i - 1, j) + 1\\
+        \mathrm{lev}_{a, b}(i, j - 1) + 1 & \mathrm{otherwise.}\\
+        \mathrm{lev}_{a, b}(i - 1, j - 1) + [a_i \neq b_j]\\
+      \end{cases}
+    \end{cases}
+  \]
+  \bigskip
+
+  Allows for insertions, deletions and substitutions.
+  \bigskip
+  \pause
+
+  Example (distance = 3):
+  \begin{center}
+    \bt{%
+      GATCGGACC-G\\
+      | |||| || |\\
+      G-TCGGTCCCG\\
+    }
+  \end{center}
+\end{frame}
+
+\begin{frame}
+  \frametitle{Hamming distance}
+  \[
+    \mathrm{ham}_{a, b} = \sum_{i = 0}^{|a|} [a_i \neq b_i]
+  \]
+  \bigskip
+
+  Only allows for substitutions.
+  \bigskip
+  \pause
+
+  Example (distance = 5):
+  \begin{center}
+    \bt{%
+      GATCGGACCG\\
+      | \ \ | \ |||\\
+      GTCGGTCCCG\\
+    }
+  \end{center}
+\end{frame}
+
+\section{Barcode design}
+\begin{frame}[fragile]
+  \frametitle{The \bt{barcode} package}
+
+  Tool kit for:
+  \begin{itemize}
+    \item Creating barcodes.
+    \begin{itemize}
+      \item Specify length.
+      \item Maximum mononucleotide stretch length.
+      \item Minimum distance to other barcodes.
+      \begin{itemize}
+        \item Edit distance.
+        \item Hamming distance.
+      \end{itemize}
+    \end{itemize}
+    \pause
+    \item Checking barcode lists.
+    \begin{itemize}
+      \item Check the distance constraint.
+      \begin{itemize}
+        \item Edit distance.
+        \item Hamming distance.
+      \end{itemize}
+    \end{itemize}
+  \end{itemize}
+  \bigskip
+  \pause
+
+  \begin{lstlisting}[language=bash]
+    pip install barcode
+  \end{lstlisting}
+\end{frame}
+
+\section{Checking existing lists}
+\begin{frame}
+  \begin{table}[]
+    \begin{center}
+      {\small
+        \begin{tabular}{lrr}
+          name            & total & removed\\
+          \hline
+          FlexSel         &  10   &  2\\
+          MID             & 151   &  0\\
+          MP\_index       &  48   & 30\\
+          NexteraCustom   &  12   &  2\\
+          Nextera         &  12   &  2\\
+          PB              &  11   &  1\\
+          SAGE            &  12   &  2\\
+          smallRNA\_new   &   6   &  1\\
+          smallRNA\_old   &   5   &  0\\
+          SOL-MP-L        &  12   &  1\\
+          SrekNeo         &   8   &  0\\
+          TruSeq          &  12   &  2\\
+          TruSeqSmallRNA  &  48   & 14\\
+          TruSeqUni       &  12   &  0\\
+        \end{tabular}
+      }
+    \end{center}
+    \caption{Bad barcodes based on the edit distance.}
+  \end{table}
+\end{frame}
+
+\begin{frame}
+  \begin{table}[]
+    \begin{center}
+      {\small
+        \begin{tabular}{lrr}
+          name            & total & removed\\
+          \hline
+          FlexSel         &  10   &  2\\
+          MID             & 151   &  0\\
+          MP\_index       &  48   & 26\\
+          NexteraCustom   &  12   &  0\\
+          Nextera         &  12   &  0\\
+          PB              &  11   &  0\\
+          SAGE            &  12   &  2\\
+          smallRNA\_new   &   6   &  0\\
+          smallRNA\_old   &   5   &  0\\
+          SOL-MP-L        &  12   &  0\\
+          SrekNeo         &   8   &  0\\
+          TruSeq          &  12   &  0\\
+          TruSeqSmallRNA  &  48   &  1\\
+          TruSeqUni       &  12   &  0\\
+        \end{tabular}
+      }
+    \end{center}
+    \caption{Bad barcodes based on the Hamming distance.}
+  \end{table}
+\end{frame}
+
+\section{Conclusions}
+\begin{frame}
+  \frametitle{Be careful with barcodes}
+
+  Only the ``MID'' set seems to be usable for 454 and Ion Torrent.
+  \bigskip
+  \pause
+
+  Make sure to use the \emph{Hamming distance} when demultiplexing Illumina
+  data.
+  \bigskip
+  \pause
+
+  For the following sets, do not use error correction:
+  \begin{itemize}
+    \item FlexSel.
+    \item MP\_index.
+    \item SAGE.
+    \item TruSeqSmallRNA.
+  \end{itemize}
+  \bigskip
+  \bigskip
+  \pause
+
+  Do not mix barcode sets, do not design them yourself.
+\end{frame}
+
+\section{Questions?}
+\lastpagetemplate
+\begin{frame}
+  \begin{center}
+    Acknowledgements:
+    \bigskip
+    \bigskip
+
+  \end{center}
+\end{frame}
+
+\end{document}
