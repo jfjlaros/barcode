@@ -208,7 +208,7 @@ def main():
         help="input file")
     distance_parser = argparse.ArgumentParser(add_help=False)
     distance_parser.add_argument("-d", dest="distance", type=int, default=3,
-        help="minimum distance between the barcodes")
+        help="minimum distance between the barcodes (int default=%(default)s)")
     distance_parser.add_argument("-H", dest="hamming", default=False,
         action="store_true", help="use Hamming distance")
 
@@ -222,9 +222,9 @@ def main():
     parser_make = subparsers.add_parser("make", parents=[output_parser,
         distance_parser], description=docSplit(barcode))
     parser_make.add_argument("-l", dest="length", type=int, default=8,
-        help="lenght of the barcodes")
+        help="lenght of the barcodes (int default=%(default)s)")
     parser_make.add_argument("-s", dest="stretch", type=int, default=2,
-        help="maximum mononucleotide stretch length")
+        help="maximum mononucleotide stretch length (int default=%(default)s)")
 
     parser_test = subparsers.add_parser("test", parents=[input_parser,
         distance_parser], description=docSplit(testBarcodes))
