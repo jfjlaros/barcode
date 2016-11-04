@@ -29,7 +29,7 @@ setup(
     install_requires=requires,
     entry_points = {
         'console_scripts': [
-            'barcode = barcode.barcode:main'
+            'barcode = barcode.cli:main'
         ]
     },
     classifiers = [
