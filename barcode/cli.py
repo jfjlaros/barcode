@@ -5,8 +5,8 @@ import sys
 
 import Levenshtein
 
-from . import doc_split, version, usage
-from .barcode import BarCode
+from . import doc_split, usage, version
+from .barcode import all_barcodes, filter_distance, filter_stretches
 
 
 def make_barcodes(length, max_stretch, min_dist, distance):
@@ -19,10 +19,8 @@ def make_barcodes(length, max_stretch, min_dist, distance):
     :arg int min_dist: Minimum distance between the barcodes.
     :arg function distance: Distance function.
     """
-    bc = BarCode(distance)
-
-    return bc.filter_distance(
-        bc.filter_stretches(bc.all_barcodes(length), max_stretch), min_dist)
+    return filter_distance(
+        filter_stretches(all_barcodes(length), max_stretch), min_dist)
 
 
 def test_barcodes(barcodes, min_dist, distance, handle):
@@ -32,12 +30,11 @@ def test_barcodes(barcodes, min_dist, distance, handle):
     :arg list barcodes: List of barcodes.
     :arg int min_dist: Minimum distance between the barcodes.
     :arg function distance: Distance function.
+    :arg steam handle: Open readable handle to a file.
 
     :returns int: The number of barcodes that violate the distance constraint.
     """
-    bc = BarCode(distance)
-
-    good_subset = bc.filter_distance(barcodes, min_dist)
+    good_subset = filter_distance(barcodes, min_dist)
     if handle:
         handle.write('\n'.join(good_subset))
 

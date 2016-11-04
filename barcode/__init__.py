@@ -7,7 +7,7 @@ Copyright (c) 2013-2016 Jeroen F.J. Laros <J.F.J.Laros@lumc.nl>
 
 Licensed under the MIT license, see the LICENSE file.
 """
-from .barcode import BarCode
+from .barcode import filter_distance, all_barcodes, filter_stretches
 
 
 __version_info__ = ('0', '6', '0')

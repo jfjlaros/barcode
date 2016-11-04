@@ -1,114 +1,110 @@
 import Levenshtein
 
 
-class BarCode(object):
+_nucleotides = ['A', 'C', 'G', 'T']
+
+
+def _all_words(bucket, word, length, result):
     """
-    Design and test NGS barcodes.
+    Generate all possible words of a certain length over a specified
+    alphabet.
+
+    :arg list bucket: An alphabet.
+    :arg str word: A word over the alphabet {bucket}.
+    :arg int length: Lenth of the barcodes.
+    :arg list result: Constructed words.
     """
-    _nucleotides = ['A', 'C', 'G', 'T']
+    if length:
+        for i in bucket:
+            _all_words(bucket, word + i, length - 1, result)
+    else:
+        result.append(word)
 
-    def __init__(self, distance=Levenshtein.distance):
-        """
-        Initialise the class.
 
-        :arg function distance: Distance function.
-        """
-        self.distance = distance
+def _filter_stretch(barcode, stretches):
+    """
+    Test whether {barcode} contains none of the stretches in {stretches}.
 
-    def _all_words(self, bucket, word, length, result):
-        """
-        Generate all possible words of a certain length over a specified
-        alphabet.
+    :arg str barcode: A barcode.
+    :arg list stretches:
 
-        :arg list bucket: An alphabet.
-        :arg str word: A word over the alphabet {bucket}.
-        :arg int length: Lenth of the barcodes.
-        :arg list result: Constructed words.
-        """
-        if length:
-            for i in bucket:
-                self._all_words(bucket, word + i, length - 1, result)
-        else:
-            result.append(word)
+    :returns bool: True if the barcode is clean, False otherwise.
+    """
+    for i in stretches:
+        if i in barcode:
+            return False
 
-    def _filter_stretch(self, barcode, stretches):
-        """
-        Test whether {barcode} contains none of the stretches in {stretches}.
+    return True
 
-        :arg str barcode: A barcode.
-        :arg list stretches:
 
-        :returns bool: True if the barcode is clean, False otherwise.
-        """
-        for i in stretches:
-            if i in barcode:
-                return False
+def _filter_distance(barcodes, candidate, min_dist, distance):
+    """
+    Test whether {candidate} can be added to {barcodes} based on the
+    minimum distance between {candidate} and all barcodes in {barcodes}.
 
-        return True
+    :arg list barcodes: List of barcodes.
+    :arg str candidate: Candidate barcode.
+    :arg int min_dist: Minimum distance between the barcodes.
+    :arg function distance: Distance function.
 
-    def _filter_distance(self, barcodes, candidate, min_dist):
-        """
-        Test whether {candidate} can be added to {barcodes} based on the
-        minimum distance between {candidate} and all barcodes in {barcodes}.
+    :returns bool: True if the barcode is clean, False otherwise.
+    """
+    for i in barcodes:
+        if distance(i, candidate) < min_dist:
+            return False
 
-        :arg list barcodes: List of barcodes.
-        :arg str candidate: Candidate barcode.
-        :arg int min_dist: Minimum distance between the barcodes.
+    return True
 
-        :returns bool: True if the barcode is clean, False otherwise.
-        """
-        for i in barcodes:
-            if self.distance(i, candidate) < min_dist:
-                return False
 
-        return True
+def all_barcodes(length):
+    """
+    Generate all possible barcodes of a certain length.
 
-    def all_barcodes(self, length):
-        """
-        Generate all possible barcodes of a certain length.
+    :arg int length: Lenth of the barcodes.
 
-        :arg int length: Lenth of the barcodes.
+    :returns list: List of barcodes.
+    """
+    result = []
 
-        :returns list: List of barcodes.
-        """
-        result = []
+    _all_words(_nucleotides, '', length, result)
 
-        self._all_words(self._nucleotides, '', length, result)
+    return result
 
-        return result
 
-    def filter_stretches(self, barcodes, max_stretch):
-        """
-        Filter a list of barcodes for mononucleotide stretches.
+def filter_stretches(barcodes, max_stretch):
+    """
+    Filter a list of barcodes for mononucleotide stretches.
 
-        :arg list barcodes: List of barcodes.
-        :arg int max_stretch: Maximum mononucleotide stretch length.
+    :arg list barcodes: List of barcodes.
+    :arg int max_stretch: Maximum mononucleotide stretch length.
 
-        :returns list: List of barcodes filtered for mononucleotide stretches.
-        """
-        stretches = map(lambda x: (max_stretch + 1) * x, self._nucleotides)
-        result = []
+    :returns list: List of barcodes filtered for mononucleotide stretches.
+    """
+    stretches = map(lambda x: (max_stretch + 1) * x, _nucleotides)
+    result = []
 
-        for i in barcodes:
-            if self._filter_stretch(i, stretches):
-                result.append(i)
+    for i in barcodes:
+        if _filter_stretch(i, stretches):
+            result.append(i)
 
-        return result
+    return result
 
-    def filter_distance(self, barcodes, min_dist):
-        """
-        Filter a list of barcodes for distance to other barcodes.
 
-        :arg list barcodes: List of barcodes.
-        :arg int min_dist: Minimum distance between the barcodes.
+def filter_distance(barcodes, min_dist, distance=Levenshtein.distance):
+    """
+    Filter a list of barcodes for distance to other barcodes.
 
-        :returns list: List of barcodes filtered for distance to other
-            barcodes.
-        """
-        result = []
+    :arg list barcodes: List of barcodes.
+    :arg int min_dist: Minimum distance between the barcodes.
+    :arg function distance: Distance function.
 
-        for i in barcodes:
-            if self._filter_distance(result, i, min_dist):
-                result.append(i)
+    :returns list: List of barcodes filtered for distance to other
+        barcodes.
+    """
+    result = []
 
-        return result
+    for i in barcodes:
+        if _filter_distance(result, i, min_dist, distance):
+            result.append(i)
+
+    return result
