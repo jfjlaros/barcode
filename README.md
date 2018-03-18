@@ -20,9 +20,6 @@ For some sequencers it is important that mononucleotide stretches in barcodes
 are below a minimum length. An additional filter can be used to remove these
 barcodes.
 
-Development of Barcode is hosted
-[on our GitLab server](https://git.lumc.nl/j.f.j.laros/barcode).
-
 
 ## Easy installation
 If you have installed the `pip` package installer, you can easily install
@@ -34,7 +31,7 @@ Barcode by typing:
 ## Installing from source
 To install from the source repository, use:
 
-    git clone https://git.lumc.nl/j.f.j.laros/barcode.git
+    git clone https://github.com/jfjlaros/barcode.git
     cd barcode
     pip install .
 
