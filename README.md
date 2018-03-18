@@ -23,11 +23,13 @@ barcodes.
 Development of Barcode is hosted
 [on our GitLab server](https://git.lumc.nl/j.f.j.laros/barcode).
 
+
 ## Easy installation
 If you have installed the `pip` package installer, you can easily install
 Barcode by typing:
 
     pip install barcode
+
 
 ## Installing from source
 To install from the source repository, use:
@@ -35,6 +37,7 @@ To install from the source repository, use:
     git clone https://git.lumc.nl/j.f.j.laros/barcode.git
     cd barcode
     pip install .
+
 
 ## Usage
 The `barcode` program has two subcommands; one for the creation of a set of
@@ -70,12 +73,13 @@ file via the `-o` option:
 
     barcode test -o good_barcodes.txt barcodes.txt
 
+
 ## Library usage
 Barcode design via the library is done in three steps. First obtain the full
 set of permutations with the `all_barcodes` function:
 
 ```python
->>> from backtranslate import all_barcodes, filter_distance, filter_stretches
+>>> from barcode import all_barcodes, filter_distance, filter_stretches
 >>>
 >>> # Generate all barcodes of length 2.
 >>> all_barcodes(2)
