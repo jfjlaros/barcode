@@ -1,5 +1,5 @@
-Barcode: Design and test NGS barcodes
-=====================================
+Barcode: Design and validate NGS barcodes
+=========================================
 
 .. image:: https://img.shields.io/github/last-commit/jfjlaros/barcode.svg
    :target: https://github.com/jfjlaros/barcode/graphs/commit-activity
