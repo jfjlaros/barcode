@@ -1,6 +1,4 @@
-"""
-Tests for the barcode library.
-"""
+"""Tests for the barcode library."""
 from barcode import all_barcodes, filter_distance, filter_stretches
 
 

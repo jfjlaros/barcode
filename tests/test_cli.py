@@ -1,6 +1,4 @@
-"""
-Tests for the barcode CLI.
-"""
+"""Tests for the barcode CLI."""
 import Levenshtein
 
 from barcode.cli import make_barcodes, test_barcodes as _test_barcodes
