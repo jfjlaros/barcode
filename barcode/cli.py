@@ -58,6 +58,7 @@ def main():
         description=usage[0], epilog=usage[1])
     parser.add_argument('-v', action='version', version=version(parser.prog))
     subparsers = parser.add_subparsers(dest='subcommand')
+    subparsers.required = True
 
     parser_make = subparsers.add_parser(
         'make', parents=[output_parser, distance_parser],
