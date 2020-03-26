@@ -1,5 +1,3 @@
-#!/usr/bin/env python
-
 import argparse
 import sys
 
@@ -10,8 +8,7 @@ from .barcode import all_barcodes, filter_distance, filter_stretches
 
 
 def make_barcodes(length, max_stretch, min_dist, distance):
-    """
-    Make a set of barcodes, filter them for mononucleotide stretches and for
+    """Make a set of barcodes, filter them for mononucleotide stretches and for
     distances with other barcodes.
 
     :arg int length: Lenth of the barcodes.
@@ -24,8 +21,7 @@ def make_barcodes(length, max_stretch, min_dist, distance):
 
 
 def test_barcodes(barcodes, min_dist, distance, handle):
-    """
-    Test a set of barcodes.
+    """Test a set of barcodes.
 
     :arg list barcodes: List of barcodes.
     :arg int min_dist: Minimum distance between the barcodes.
@@ -42,9 +38,7 @@ def test_barcodes(barcodes, min_dist, distance, handle):
 
 
 def main():
-    """
-    Main entry point.
-    """
+    """Main entry point."""
     output_parser = argparse.ArgumentParser(add_help=False)
     output_parser.add_argument(
         'OUTPUT', type=argparse.FileType('w'), help='output file')
@@ -64,6 +58,7 @@ def main():
         description=usage[0], epilog=usage[1])
     parser.add_argument('-v', action='version', version=version(parser.prog))
     subparsers = parser.add_subparsers(dest='subcommand')
+    subparsers.required = True
 
     parser_make = subparsers.add_parser(
         'make', parents=[output_parser, distance_parser],

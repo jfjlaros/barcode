@@ -5,8 +5,7 @@ _nucleotides = ['A', 'C', 'G', 'T']
 
 
 def _all_words(bucket, word, length, result):
-    """
-    Generate all possible words of a certain length over a specified
+    """Generate all possible words of a certain length over a specified
     alphabet.
 
     :arg list bucket: An alphabet.
@@ -22,8 +21,7 @@ def _all_words(bucket, word, length, result):
 
 
 def _filter_stretch(barcode, stretches):
-    """
-    Test whether {barcode} contains none of the stretches in {stretches}.
+    """Test whether {barcode} contains none of the stretches in {stretches}.
 
     :arg str barcode: A barcode.
     :arg list stretches:
@@ -38,9 +36,8 @@ def _filter_stretch(barcode, stretches):
 
 
 def _filter_distance(barcodes, candidate, min_dist, distance):
-    """
-    Test whether {candidate} can be added to {barcodes} based on the
-    minimum distance between {candidate} and all barcodes in {barcodes}.
+    """Test whether {candidate} can be added to {barcodes} based on the minimum
+    distance between {candidate} and all barcodes in {barcodes}.
 
     :arg list barcodes: List of barcodes.
     :arg str candidate: Candidate barcode.
@@ -57,8 +54,7 @@ def _filter_distance(barcodes, candidate, min_dist, distance):
 
 
 def all_barcodes(length):
-    """
-    Generate all possible barcodes of a certain length.
+    """Generate all possible barcodes of a certain length.
 
     :arg int length: Lenth of the barcodes.
 
@@ -72,15 +68,14 @@ def all_barcodes(length):
 
 
 def filter_stretches(barcodes, max_stretch):
-    """
-    Filter a list of barcodes for mononucleotide stretches.
+    """Filter a list of barcodes for mononucleotide stretches.
 
     :arg list barcodes: List of barcodes.
     :arg int max_stretch: Maximum mononucleotide stretch length.
 
     :returns list: List of barcodes filtered for mononucleotide stretches.
     """
-    stretches = map(lambda x: (max_stretch + 1) * x, _nucleotides)
+    stretches = list(map(lambda x: (max_stretch + 1) * x, _nucleotides))
     result = []
 
     for i in barcodes:
@@ -91,8 +86,7 @@ def filter_stretches(barcodes, max_stretch):
 
 
 def filter_distance(barcodes, min_dist, distance=Levenshtein.distance):
-    """
-    Filter a list of barcodes for distance to other barcodes.
+    """Filter a list of barcodes for distance to other barcodes.
 
     :arg list barcodes: List of barcodes.
     :arg int min_dist: Minimum distance between the barcodes.
