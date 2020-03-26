@@ -3,7 +3,7 @@ import sys
 
 import Levenshtein
 
-from .meta import doc_split, usage, version
+from . import doc_split, usage, version
 from .barcode import all_barcodes, filter_distance, filter_stretches
 
 
