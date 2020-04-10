@@ -86,12 +86,14 @@ def main():
     if args.subcommand == 'make':
         args.OUTPUT.write('\n'.join(
             make_barcodes(args.length, args.stretch, args.distance, dfunc)))
+        args.OUTPUT.write('\n')
 
     if args.subcommand == 'test':
-        sys.stdout.write('{} barcodes violate the distance contraint.'.format(
-            test_barcodes(
-                map(lambda x: x.strip(), args.INPUT.readlines()),
-                args.distance, dfunc, args.output)))
+        sys.stdout.write(
+            '{} barcodes violate the distance contraint.\n'.format(
+                test_barcodes(
+                    list(map(lambda x: x.strip(), args.INPUT.readlines())),
+                    args.distance, dfunc, args.output)))
 
 
 if __name__ == '__main__':
