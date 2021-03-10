@@ -4,8 +4,9 @@ from barcode import all_barcodes, filter_distance, filter_stretches
 
 class TestLibrary(object):
     def test_all_barcodes_1(self):
-        assert all_barcodes(2) == ['AA', 'AC', 'AG', 'AT', 'CA', 'CC', 'CG',
-            'CT', 'GA', 'GC', 'GG', 'GT', 'TA', 'TC', 'TG', 'TT']
+        assert all_barcodes(2) == [
+            'AA', 'AC', 'AG', 'AT', 'CA', 'CC', 'CG', 'CT', 'GA', 'GC', 'GG',
+            'GT', 'TA', 'TC', 'TG', 'TT']
 
     def test_all_barcodes_2(self):
         assert len(all_barcodes(3)) == 4 ** 3
@@ -13,7 +14,7 @@ class TestLibrary(object):
     def test_all_barcodes_3(self):
         assert len(all_barcodes(4)) == 4 ** 4
 
-    def test_all_barcodes_3(self):
+    def test_all_barcodes_4(self):
         assert len(all_barcodes(5)) == 4 ** 5
 
     def test_filter_distance_1(self):
@@ -35,8 +36,9 @@ class TestLibrary(object):
         assert len(filter_distance(all_barcodes(5), 3)) == 36
 
     def test_filter_stretches_1(self):
-        assert filter_stretches(all_barcodes(2), 1) == ['AC', 'AG', 'AT', 'CA',
-            'CG', 'CT', 'GA', 'GC', 'GT', 'TA', 'TC', 'TG']
+        assert filter_stretches(all_barcodes(2), 1) == [
+            'AC', 'AG', 'AT', 'CA', 'CG', 'CT', 'GA', 'GC', 'GT', 'TA', 'TC',
+            'TG']
 
     def test_filter_stretches_2(self):
         assert len(filter_stretches(all_barcodes(3), 1)) == 36
