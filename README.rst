@@ -3,8 +3,8 @@ Barcode: Design and validate NGS barcodes
 
 .. image:: https://img.shields.io/github/last-commit/jfjlaros/barcode.svg
    :target: https://github.com/jfjlaros/barcode/graphs/commit-activity
-.. image:: https://travis-ci.org/jfjlaros/barcode.svg?branch=master
-   :target: https://travis-ci.org/jfjlaros/barcode
+.. image:: https://github.com/jfjlaros/barcode/actions/workflows/python-package.yml/badge.svg
+   :target: https://github.com/jfjlaros/barcode/actions/workflows/python-package.yml
 .. image:: https://readthedocs.org/projects/barcode/badge/?version=latest
    :target: https://barcode.readthedocs.io/en/latest
 .. image:: https://img.shields.io/github/release-date/jfjlaros/barcode.svg
