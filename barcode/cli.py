@@ -37,8 +37,8 @@ def test_barcodes(barcodes, min_dist, distance, handle):
     return len(barcodes) - len(good_subset)
 
 
-def main():
-    """Main entry point."""
+def _arg_parser():
+    """Command line argument parsing."""
     output_parser = argparse.ArgumentParser(add_help=False)
     output_parser.add_argument(
         'OUTPUT', type=argparse.FileType('w'), help='output file')
@@ -77,7 +77,17 @@ def main():
         '-o', dest='output', type=argparse.FileType('w'),
         help='list of good barcodes')
 
-    args = parser.parse_args()
+    return parser
+
+
+def main():
+    """Main entry point."""
+    parser = _arg_parser()
+
+    try:
+        args = parser.parse_args()
+    except IOError as error:
+        parser.error(error)
 
     dfunc = Levenshtein.distance
     if args.hamming:
