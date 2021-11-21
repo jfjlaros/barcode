@@ -1,8 +1,3 @@
-from subprocess import call
-
-# NOTE: Add sphinx_autodoc_typehints when ReadTheDocs supports it.
-call('pip install six sphinx-argparse ..', shell=True)
-
 from barcode import _get_metadata
 
 
@@ -12,6 +7,5 @@ project = _get_metadata('Name')
 release = _get_metadata('Version')
 
 autoclass_content = 'both'
-# NOTE: Add sphinx_autodoc_typehints when ReadTheDocs supports it.
-extensions = ['sphinx.ext.autodoc', 'sphinxarg.ext']
+extensions = ['sphinx.ext.autodoc', 'sphinx_autodoc_typehints', 'sphinxarg.ext']
 master_doc = 'index'
