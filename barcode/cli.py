@@ -33,6 +33,7 @@ def test_barcodes(barcodes, min_dist, distance, handle):
     good_subset = filter_distance(barcodes, min_dist)
     if handle:
         handle.write('\n'.join(good_subset))
+        handle.flush()
 
     return len(barcodes) - len(good_subset)
 
@@ -97,6 +98,7 @@ def main():
         args.OUTPUT.write('\n'.join(
             make_barcodes(args.length, args.stretch, args.distance, dfunc)))
         args.OUTPUT.write('\n')
+        args.OUTPUT.flush()
 
     if args.subcommand == 'test':
         sys.stdout.write(
