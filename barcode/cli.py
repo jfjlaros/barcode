@@ -16,8 +16,8 @@ def make_barcodes(length, max_stretch, min_dist, distance):
     :arg int min_dist: Minimum distance between the barcodes.
     :arg function distance: Distance function.
     """
-    return filter_distance(
-        filter_stretches(all_barcodes(length), max_stretch), min_dist)
+    return filter_distance(filter_stretches(
+        all_barcodes(length), max_stretch), min_dist, distance)
 
 
 def test_barcodes(barcodes, min_dist, distance, handle):
